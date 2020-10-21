@@ -36,6 +36,14 @@ class Main():
 
         return np.array([xTrain, yTrain, xVal, yVal, xTest, yTest], dtype=list)
 
+    def costFunction(self, X, y, theta, lambd):
+        m = len(y)
+        sqrError = 0
+        for i in range(0, m):
+            sqrError += hypothesis
+        return hypothesis
+
+
 
 
 
@@ -49,13 +57,16 @@ if __name__ == '__main__':
 
 
     brub = Main()
-    array = brub.trainTestSplit(X, y)
+    # array = brub.trainTestSplit(X, y)
+    #
+    # xTrain = array[0]
+    # yTrain = array[1]
+    # xVal = array[2]
+    # yVal = array[3]
+    # xTest = array[4]
+    # yTest = array[5]
 
-    xTrain = array[0]
-    yTrain = array[1]
-    xVal = array[2]
-    yVal = array[3]
-    xTest = array[4]
-    yTest = array[5]
+    newArray = brub.costFunction(X, y, np.array([[0], [1]]), 1.0)
+    print(newArray)
 
-    print(xTrain)
+
