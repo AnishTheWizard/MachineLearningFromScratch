@@ -37,11 +37,16 @@ class Main():
         return np.array([xTrain, yTrain, xVal, yVal, xTest, yTest], dtype=list)
 
     def costFunction(self, X, y, theta, lambd):
-        m = len(y)
+        m = len(X[0])
+        n = len(y)
+        hypothesis = theta[0][0] + np.multiply(theta[1][0], X)
         sqrError = 0
         for i in range(0, m):
-            sqrError += hypothesis
-        return hypothesis
+            for j in range(0, n):
+                sqrError += (hypothesis[j][i] - y[j])**2
+
+        sqrError *= 1/(2*m)
+        return sqrError
 
 
 
