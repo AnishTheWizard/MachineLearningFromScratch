@@ -5,7 +5,7 @@ import DataManagement as dm
 
 
 class Main():
-    global hypothesis 
+    global hypothesis
 
     def __init__(self):
         pass
@@ -56,6 +56,9 @@ class Main():
 
         sqrError *= 1 / (2 * n)  # taking the 1/2 of the average
         return sqrError  # return
+
+    def gradDesc(self):
+        pass
 
 
 if __name__ == '__main__':
