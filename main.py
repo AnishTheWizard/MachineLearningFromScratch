@@ -5,6 +5,8 @@ import DataManagement as dm
 
 
 class Main():
+    global hypothesis 
+
     def __init__(self):
         pass
 
@@ -45,13 +47,16 @@ class Main():
         for i in range(0, m):
             featureList.append(dm.appendColumns(X, i))
 
-        hypothesis = theta[0][0] + np.multiply(theta[1][0], featureList[0]) + np.multiply(theta[2][0], featureList[1]) + np.multiply(theta[3][0], featureList[2]) + np.multiply(theta[4][0], featureList[3])
+        self.hypothesis = theta[0][0] + np.multiply(theta[1][0], featureList[0]) + np.multiply(theta[2][0],
+                                                                                          featureList[1]) + np.multiply(
+            theta[3][0], featureList[2]) + np.multiply(theta[4][0], featureList[3])
         sqrError = 0  # instantiating square error value
         for i in range(0, n):  # for each feature
-                sqrError += (hypothesis[i] - y[i]) ** 2  # sqr error between prediction and y value
+            sqrError += (self.hypothesis[i] - y[i]) ** 2  # sqr error between prediction and y value
 
         sqrError *= 1 / (2 * n)  # taking the 1/2 of the average
         return sqrError  # return
+
 
 if __name__ == '__main__':
     csv = pd.read_csv("housing_prices.csv")
