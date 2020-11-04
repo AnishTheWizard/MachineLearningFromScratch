@@ -2,10 +2,11 @@
 import numpy as np
 import pandas as pd
 import DataManagement as dm
+import matplotlib.pyplot as pp
 
 
 class Main():
-    global hypothesis
+    global hypothesis, featureList
 
     def __init__(self):
         pass
@@ -47,18 +48,35 @@ class Main():
         for i in range(0, m):
             featureList.append(dm.appendColumns(X, i))
 
-        self.hypothesis = theta[0][0] + np.multiply(theta[1][0], featureList[0]) + np.multiply(theta[2][0],
-                                                                                          featureList[1]) + np.multiply(
-            theta[3][0], featureList[2]) + np.multiply(theta[4][0], featureList[3])
+        self.featureList = featureList
+
+        self.hypothesis = theta[0] + np.multiply(theta[1], featureList[0]) + np.multiply(theta[2], featureList[1]) + np.multiply(theta[3], featureList[2]) + np.multiply(theta[4], featureList[3])
+        hypothesis = self.hypothesis
         sqrError = 0  # instantiating square error value
         for i in range(0, n):  # for each feature
-            sqrError += (self.hypothesis[i] - y[i]) ** 2  # sqr error between prediction and y value
+            sqrError += (hypothesis[i] - y[i]) ** 2  # sqr error between prediction and y value
 
         sqrError *= 1 / (2 * n)  # taking the 1/2 of the average
         return sqrError  # return
 
-    def gradDesc(self):
-        pass
+    def gradDescent(self, X, y, theta, alpha):
+        hypothesis = self.hypothesis
+        m = len(X[0]) #4 features
+        n = len(X)
+        featureList = self.featureList
+
+        for index, item in enumerate(theta):
+            isTheta0 = index == 0
+            sumErr = 0
+            if isTheta0:
+                for i in range(0, m):
+                    for j in range(0, n):
+                        sumErr += (hypothesis[j] - y[j]) * X[j][i]
+                    sumErr *= alpha / m
+                    theta[i] = theta[i] - sumErr
+                    hypothesis = theta[0] + np.multiply(theta[1], featureList[0]) + np.multiply(theta[2], featureList[1]) + np.multiply(theta[3], featureList[2]) + np.multiply(theta[4], featureList[3])
+        return theta
+
 
 
 if __name__ == '__main__':
@@ -66,7 +84,7 @@ if __name__ == '__main__':
     predict = "Price"
     X = np.array(csv.drop(["Home", "Neighborhood", "Brick", predict], axis=1))
     y = np.array(csv[predict])
-    theta = np.array([[1], [1], [1], [1], [1]])
+    theta = np.array([1, 1, 1, 1, 1])
 
     brub = Main()
     # array = brub.trainTestSplit(X, y)
@@ -79,4 +97,10 @@ if __name__ == '__main__':
     # yTest = array[5]
 
     J = brub.costFunction(X, y, theta, 1.0)  # cost with given theta
-    print(J)
+
+    theta = brub.gradDescent(X, y, theta, 0.1)
+    print(np.multiply(theta[0], brub.featureList[0]))
+    pp.plot(np.multiply(theta[0], brub.featureList[0]), y)
+    pp.show()
+
+
