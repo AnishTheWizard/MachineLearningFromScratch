@@ -36,3 +36,10 @@ def addAll(list) -> float:
 
     return sum
 
+
+def appendColumns(array, column) -> np.ndarray:  # given a numpy 2d array
+    returnList = []
+    for i in range(0, len(array)):
+        returnList.append(array[i][column])
+
+    return returnList

@@ -3,7 +3,10 @@ import numpy as np
 import pandas as pd
 import DataManagement as dm
 
+
 class Main():
+    global hypothesis 
+
     def __init__(self):
         pass
 
@@ -11,7 +14,8 @@ class Main():
         numTrainItems = int(len(y) * 0.6)
         numCVItems = int(len(y) * 0.2)
         numTestItems = int(len(y) * 0.2)
-        diffItems = len(y) - (numCVItems + numTrainItems + numTestItems) # whatever i cant divide into cv and test, i put into train
+        diffItems = len(y) - (
+                numCVItems + numTrainItems + numTestItems)  # whatever i cant divide into cv and test, i put into train
         numTrainItems += diffItems
 
         print("starting dataSelection process")
@@ -36,22 +40,22 @@ class Main():
 
         return np.array([xTrain, yTrain, xVal, yVal, xTest, yTest], dtype=list)
 
-    def costFunction(self, X, y, theta, lambd):
-        m = len(X[0])
-        n = len(y)
-        hypothesis = theta[0][0] + np.multiply(theta[1][0], X)
-        sqrError = 0
+    def costFunction(self, X, y, theta, lambd) -> float:
+        m = len(X[0])  # number of features
+        n = len(y)  # number of rows
+        featureList = []
         for i in range(0, m):
-            for j in range(0, n):
-                sqrError += (hypothesis[j][i] - y[j])**2
+            featureList.append(dm.appendColumns(X, i))
 
-        sqrError *= 1/(2*m)
-        return sqrError
+        self.hypothesis = theta[0][0] + np.multiply(theta[1][0], featureList[0]) + np.multiply(theta[2][0],
+                                                                                          featureList[1]) + np.multiply(
+            theta[3][0], featureList[2]) + np.multiply(theta[4][0], featureList[3])
+        sqrError = 0  # instantiating square error value
+        for i in range(0, n):  # for each feature
+            sqrError += (self.hypothesis[i] - y[i]) ** 2  # sqr error between prediction and y value
 
-
-
-
-
+        sqrError *= 1 / (2 * n)  # taking the 1/2 of the average
+        return sqrError  # return
 
 
 if __name__ == '__main__':
@@ -59,7 +63,7 @@ if __name__ == '__main__':
     predict = "Price"
     X = np.array(csv.drop(["Home", "Neighborhood", "Brick", predict], axis=1))
     y = np.array(csv[predict])
-
+    theta = np.array([[1], [1], [1], [1], [1]])
 
     brub = Main()
     # array = brub.trainTestSplit(X, y)
@@ -71,7 +75,5 @@ if __name__ == '__main__':
     # xTest = array[4]
     # yTest = array[5]
 
-    newArray = brub.costFunction(X, y, np.array([[0], [1]]), 1.0)
-    print(newArray)
-
-
+    J = brub.costFunction(X, y, theta, 1.0)  # cost with given theta
+    print(J)
